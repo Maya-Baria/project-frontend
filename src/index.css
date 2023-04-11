@@ -11,3 +11,21 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.text-wrapper h1,h4{
+  color: cadetblue;
+}
+
+.text-wrapper p{
+  background-color: beige;
+  color: cornflowerblue;
+  text-align: justify;
+}
+.text-wrapper span{
+  display: inline;
+}
+
+.tableHeading{
+  background-color: paleturquoise;
+}
+
