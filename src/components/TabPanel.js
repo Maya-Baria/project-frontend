@@ -50,7 +50,7 @@ export default function BasicTabs() {
   const [isLoading, setIsLoding] = useState(true);
   const [ageFilter, setAgeFilter] = useState(30);
 
-  console.log("Age Filter =>", ageFilter);
+  console.log("Age Filter ===>", ageFilter);
 
   useEffect(() => {
     fetch("https://dummyjson.com/users")
