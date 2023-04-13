@@ -6,10 +6,11 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Slider from "@mui/material/Slider";
 
-import ClientDetail from "./requirement";
+// import ClientDetail from "./requirement";
 
 import UserDetail from "./userDetails";
 import Clients from "../table2";
+import NestedModal from "./model";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -99,8 +100,9 @@ export default function BasicTabs() {
         </div>
       </TabPanel>
       <TabPanel value={value} index={2}>
-        <ClientDetail />
+        <NestedModal/>
       </TabPanel>
+      
     </Box>
   );
 }

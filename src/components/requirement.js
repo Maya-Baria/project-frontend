@@ -5,7 +5,6 @@ import Option from "@mui/joy/Option";
 import Grid from "@mui/material/Grid";
 import { Container } from "@mui/joy";
 
-
 const ClientDetail = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -20,12 +19,18 @@ const ClientDetail = () => {
       role: Data.get("role"),
     });
   };
-  
 
   return (
     <Container sx={{ alignItems: "center", flexGrow: 1 }}>
       <Box component="form" onSubmit={handleSubmit}>
-        <Grid container>
+        <Grid
+          container
+          sx={{
+            justifyContent: "center",
+            alignItems: "center",
+            display: "flex",
+          }}
+        >
           <Stack direction="row" spacing={3}>
             <Grid>
               <Stack spacing={3}>
@@ -52,11 +57,7 @@ const ClientDetail = () => {
 
             <Grid>
               <Stack spacing={3}>
-                <TextField
-                  id="date"
-                  name="date"
-                  type="date"
-                ></TextField>
+                <TextField id="date" name="date" type="date"></TextField>
 
                 <TextField
                   id="designation"
@@ -85,14 +86,27 @@ const ClientDetail = () => {
             </Grid>
           </Stack>
         </Grid>
-        <Grid container alignContent='center'>
-        <Stack >
-          <Button  
+        <Grid
+          container
+          sx={{
+            justifyContent: "center",
+            alignItems: "center",
+            display: "flex",
+          }}
+        >
+          <Stack>
+            <Button
               type="submit"
               fullWidth
               variant="contained"
-              
-              sx={{ mt: 3, mb: 2,  }} >submit</Button></Stack>
+              sx={{
+                mt: 3,
+                mb: 2,
+              }}
+            >
+              submit
+            </Button>
+          </Stack>
         </Grid>
       </Box>
     </Container>
