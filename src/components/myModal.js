@@ -19,7 +19,7 @@ const style = {
   p: 4,
 };
 
-export default function BasicModal({ open, setOpen, userData }) {
+export default function BasicModal({ open, setOpen, userData, deleteUser }) {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   console.log(userData);
@@ -40,7 +40,8 @@ export default function BasicModal({ open, setOpen, userData }) {
             Are you sure you want to delete{" "}
             {userData !== undefined ? userData.firstName : "UserData"}?
           </Typography>
-          <Stack container
+          <Stack
+            container
             direction="row"
             spacing={5}
             sx={{
@@ -50,10 +51,17 @@ export default function BasicModal({ open, setOpen, userData }) {
               my: 5,
             }}
           >
-            <Button variant="outlined" color="primary">
-              Cancle
+            <Button onClick={handleClose} variant="outlined" color="primary">
+              Cancel
             </Button>
-            <Button variant="contained" color="primary">
+            <Button
+              onClick={() => {
+                deleteUser(userData._id);
+                setOpen(false);
+              }}
+              variant="contained"
+              color="primary"
+            >
               Delete
             </Button>
           </Stack>

@@ -4,13 +4,14 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-import Slider from "@mui/material/Slider";
+
 
 // import ClientDetail from "./requirement";
 
-import UserDetail from "./userDetails";
-import Clients from "../table2";
+import Clients from "../EmployeeTable";
 import NestedModal from "./model";
+import { RetirementTable } from "./RetirementTable";
+import ClientDetail from "./requirement";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -47,23 +48,6 @@ function a11yProps(index) {
 
 export default function BasicTabs() {
   const [value, setValue] = React.useState(0);
-  const [users, setUsers] = useState([]);
-  const [isLoading, setIsLoding] = useState(true);
-  const [ageFilter, setAgeFilter] = useState(30);
-
-  console.log("Age Filter ===>", ageFilter);
-
-  useEffect(() => {
-    fetch("https://dummyjson.com/users")
-      .then((response) => response.json())
-      .then((result) => {
-        console.log("Result ==>", result);
-        const filterData = result.users.filter((user) => user.age > ageFilter);
-
-        setUsers(filterData);
-        setIsLoding(false);
-      });
-  }, [ageFilter]);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -78,31 +62,19 @@ export default function BasicTabs() {
           aria-label="basic tabs example"
         >
           <Tab label="Home" {...a11yProps(0)} />
-          <Tab label="Item Two" {...a11yProps(1)} />
-          <Tab label="Sign Up Today" {...a11yProps(2)} />
+          <Tab label="Upcoming Retirement " {...a11yProps(1)} />
+          <Tab label="Add User" {...a11yProps(2)} />
         </Tabs>
       </Box>
       <TabPanel value={value} index={0}>
         <Clients />
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <div>
-          <Box width={300}>
-            
-            <Slider
-              defaultValue={ageFilter}
-              onChange={(e) => setAgeFilter(e.target.value)}
-              aria-label="Default"
-              valueLabelDisplay="auto"
-            />
-          </Box>
-          <UserDetail userData={users} />
-        </div>
+        <RetirementTable />
       </TabPanel>
       <TabPanel value={value} index={2}>
-        <NestedModal/>
+        <ClientDetail />
       </TabPanel>
-      
     </Box>
   );
 }

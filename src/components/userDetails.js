@@ -10,7 +10,7 @@ import { Button } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import BasicModal from "./myModal";
 
-const UserDetail = ({ userData }) => {
+const UserDetail = ({ userData,deleteEmployee }) => {
   const [openModal, setOpenModal] = useState(false);
   const [tempUserData, setTempUserData] = useState();
 
@@ -19,6 +19,7 @@ const UserDetail = ({ userData }) => {
       <Table aria-label="basic table">
         <TableHead className="tableHeading">
           <TableRow>
+            <TableCell>No.</TableCell>
             <TableCell>First Name</TableCell>
             <TableCell>Last Name</TableCell>
             <TableCell>Age</TableCell>
@@ -28,20 +29,23 @@ const UserDetail = ({ userData }) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {userData.map((row) => (
+          {userData.map((employee,index) => (
             <TableRow>
               <TableCell component="th" scope="row">
-                {row.firstName}
+                {index+1}
               </TableCell>
-              <TableCell>{row.lastName}</TableCell>
-              <TableCell>{row.age}</TableCell>
-              <TableCell>{row.birthDate}</TableCell>
-              <TableCell>{row.company.title}</TableCell>
+              <TableCell component="th" scope="row">
+                {employee.firstName}
+              </TableCell>
+              <TableCell>{employee.lastName}</TableCell>
+              <TableCell>{employee.designation}</TableCell>
+              <TableCell>{employee.employeeType}</TableCell>
+              <TableCell>{employee.currentStatus}</TableCell>
               <TableCell>
                 <Button
                   onClick={() => {
                     setOpenModal(!openModal);
-                    setTempUserData(row);
+                    setTempUserData(employee);
                   }}
                   sx={{
                     mt: 3,
@@ -59,6 +63,7 @@ const UserDetail = ({ userData }) => {
         open={openModal}
         setOpen={setOpenModal}
         userData={tempUserData}
+        deleteUser={deleteEmployee}
       />
     </TableContainer>
   );
