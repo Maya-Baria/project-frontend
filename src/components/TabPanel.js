@@ -5,13 +5,13 @@ import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 
-
 // import ClientDetail from "./requirement";
 
 import Clients from "../EmployeeTable";
-import NestedModal from "./model";
+
 import { RetirementTable } from "./RetirementTable";
 import ClientDetail from "./requirement";
+import { Stack } from "@mui/system";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -56,11 +56,20 @@ export default function BasicTabs() {
   return (
     <Box sx={{ width: "100%" }}>
       <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+      <h3>Hello Systems</h3>
         <Tabs
           value={value}
+          sx={
+            {
+              borderTopWidth:1,
+              borderTop:1,
+              borderColor:"divider"
+            }
+          }
           onChange={handleChange}
           aria-label="basic tabs example"
         >
+          
           <Tab label="Home" {...a11yProps(0)} />
           <Tab label="Upcoming Retirement " {...a11yProps(1)} />
           <Tab label="Add User" {...a11yProps(2)} />

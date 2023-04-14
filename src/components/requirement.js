@@ -8,80 +8,85 @@ import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import dayjs, { Dayjs } from "dayjs";
+import dayjs from "dayjs";
 
 const ClientDetail = () => {
-  const [value, setValue] = React.useState(dayjs("2022-04-17"));
+  // const [value, setValue] = React.useState(dayjs("2022-04-17"));
+  const [dateOfJoining, setDateOfJoining] = React.useState(dayjs("2022-04-17"));
+  const [dateOfBirth, setDateOfBirth] = React.useState(dayjs("2022-04-17"));
 
-  const handleSubmit = (event) => {
+  const handleSubmitForm = (event) => {
     event.preventDefault();
 
     const Data = new FormData(event.currentTarget);
-    console.log({
-      firstName: Data.get("firstname"),
-      lastName: Data.get("lastname"),
-      dateOfBirth: value.date,
-      dateOfJoining: Data.get("dateOfJoining"),
-      designation: Data.get("designation"),
-      department: Data.get("department"),
-      employeeType: Data.get("employeeType"),
-      currentStatus: Data.get("currentStatus"),
-    });
+    const requestBody = {
+      query: `
+          mutation {
+            createEmployee(employeeInput: {
+              firstName:"${Data.get("firstname")}",
+              lastName:"${Data.get("lastname")}",
+              dateOfBirth:"${dayjs(dateOfBirth).format("YYYY-MM-DD")}",
+              dateOfJoining:"${dayjs(dateOfJoining).format("YYYY-MM-DD")}",
+              designation:"${Data.get("designation")}",
+              department:"${Data.get("department")}",
+              employeeType:"${Data.get("employeeType")}",
+              currentStatus:"${Data.get("currentStatus")}"
+            }) {
+              firstName
+              lastName
+              dateOfBirth
+              dateOfJoining
+              designation
+              department
+              employeeType
+              currentStatus
+            }
+          }
+        `,
+    };
+
+    fetch("http://localhost:4000/graphql", {
+      method: "POST",
+      body: JSON.stringify(requestBody),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => {
+        if (res.status !== 200 && res.status !== 201) {
+          throw new Error("Failed!");
+        }
+        if (res.status === 200) {
+          console.log("Data submited sucessfully");
+          event.target.reset();
+          // setOpen(true);
+        }
+
+        return res.json();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
-  // const handleSubmit = (event) => {
-  //   const Data = new FormData(event.currentTarget);
-  //   const requestBody = {
-  //     query: `
-  //         mutation {
-  //           createEmployee(employeeInput: {
-  //             firstName:"${Data.get("firstname")}",
-  //             lastName:"${lastName}",
-  //             dateOfBirth:"${dateOfBirth}",
-  //             dateOfJoining:"${dateOfJoining}",
-  //             designation:"${designation}",
-  //             department:"${department}",
-  //             employeeType:"${employeeType}",
-  //             currentStatus:"${currentStatus}"
-  //           }) {
-  //             firstName
-  //             lastName
-  //             dateOfBirth
-  //             dateOfJoining
-  //             designation
-  //             department
-  //             employeeType
-  //             currentStatus
-  //           }
-  //         }
-  //       `,
-  //   };
+  const handleJoiningDate = (date) => {
+    setDateOfJoining(date);
+    const formattedDate = dayjs(date).format("YYYY-MM-DD");
+    console.log("Formated Data =>", formattedDate);
+  };
 
-  //   fetch("http://localhost:4000/graphql", {
-  //     method: "POST",
-  //     body: JSON.stringify(requestBody),
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //   })
-  //     .then((res) => {
-  //       if (res.status !== 200 && res.status !== 201) {
-  //         throw new Error("Failed!");
-  //       }
-  //       if (res.status === 200) {
-  //         setOpen(true);
-  //       }
-
-  //       return res.json();
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-  // };
+  const handleDateOfBirth = (date) => {
+    setDateOfBirth(date);
+    const formattedDate = dayjs(date).format("YYYY-MM-DD");
+    console.log("Formated Data =>", formattedDate);
+  };
 
   return (
     <Container sx={{ alignItems: "center", flexGrow: 1 }}>
-      <Box component="form" onSubmit={handleSubmit}>
+      <Box
+        component="form"
+        onSubmit={((e) => e.preventDefault(), handleSubmitForm)}
+      >
         <Grid
           container
           sx={{
@@ -105,10 +110,9 @@ const ClientDetail = () => {
                       label="Date of Birth"
                       name="dateOfBirth"
                       id="dateOfBirth"
-                      value={value}
-                      onChange={(newValue) => {
-                        setValue(newValue);
-                      }}
+                      placeholder="Date of Birth"
+                      value={dateOfBirth}
+                      onChange={handleDateOfBirth}
                     />
                   </DemoContainer>
                 </LocalizationProvider>
@@ -168,8 +172,11 @@ const ClientDetail = () => {
                   <DemoContainer components={["DatePicker"]}>
                     <DatePicker
                       label="Date of Joining"
+                      placeholder="Date of Joining"
                       name="dateOfJoining"
                       id="dateOfJoining"
+                      value={dateOfJoining}
+                      onChange={handleJoiningDate}
                     />
                   </DemoContainer>
                 </LocalizationProvider>
