@@ -9,16 +9,31 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs from "dayjs";
+import FormValidationModal from "./formValidation";
 
 const ClientDetail = () => {
   // const [value, setValue] = React.useState(dayjs("2022-04-17"));
   const [dateOfJoining, setDateOfJoining] = React.useState(dayjs("2022-04-17"));
   const [dateOfBirth, setDateOfBirth] = React.useState(dayjs("2022-04-17"));
+  const [validFormData, setValidFormData] = React.useState(false);
 
   const handleSubmitForm = (event) => {
     event.preventDefault();
 
     const Data = new FormData(event.currentTarget);
+
+    let empType = Data.get("employeeType");
+    let designation = Data.get("designation");
+
+    if (
+      (empType === "Part-time" || empType === "intern") &&
+      (designation === "CEO" ||
+        designation === "Manager" ||
+        designation === "CTO")
+    ) {
+      setValidFormData(true);
+    }
+
     const requestBody = {
       query: `
           mutation {
@@ -45,28 +60,31 @@ const ClientDetail = () => {
         `,
     };
 
-    fetch("http://localhost:4000/graphql", {
-      method: "POST",
-      body: JSON.stringify(requestBody),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((res) => {
-        if (res.status !== 200 && res.status !== 201) {
-          throw new Error("Failed!");
-        }
-        if (res.status === 200) {
-          console.log("Data submited sucessfully");
-          event.target.reset();
-          // setOpen(true);
-        }
+    {
+      !validFormData &&
+        fetch("http://localhost:4000/graphql", {
+          method: "POST",
+          body: JSON.stringify(requestBody),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+          .then((res) => {
+            if (res.status !== 200 && res.status !== 201) {
+              throw new Error("Failed!");
+            }
+            if (res.status === 200) {
+              console.log("Data submited sucessfully");
+              event.target.reset();
+              // setOpen(true);
+            }
 
-        return res.json();
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+            return res.json();
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+    }
   };
 
   const handleJoiningDate = (date) => {
@@ -219,6 +237,7 @@ const ClientDetail = () => {
           <Stack>
             <Button
               type="submit"
+              disabled={validFormData}
               fullWidth
               variant="contained"
               sx={{
@@ -231,6 +250,7 @@ const ClientDetail = () => {
           </Stack>
         </Grid>
       </Box>
+      <FormValidationModal open={validFormData} setOpen={setValidFormData} />
     </Container>
   );
 };
